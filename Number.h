@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 //returns true if lhs is divisible by rhs
 bool is_div(const int& lhs, const int& rhs){
@@ -6,6 +7,7 @@ bool is_div(const int& lhs, const int& rhs){
 }
 
 bool is_prime(const int& num){
+	if (num == 1) { return false; }
 	for (int i = 2; i < num; i++){
 		if (is_div(num, i)){
 			return false;
@@ -45,6 +47,7 @@ private:
 		while (i <= val){
 			if (this->is_div(i) && is_prime(i)){*begin = i}
 			++begin;
+			++i;
 		}
 	}
 
@@ -54,13 +57,33 @@ public:
 	Number() : val(1), prime(false), prime_factors(new int[0]), prime_size(0) {}
 
 	//Constructor that takes an int to use for the Number's value (must be a positive int)
-	Number(const int& num) : val(num) {
+	Number(const int& num) : val(num), prime(false), prime_factors(nullptr), prime_size(0) {
 		if (num < 1){
 			std::cout << "Warning: non-positive number introduced." << std::endl;
 			throw;
 		}
-		prime = this->is_prime();
+		try{
+			prime = this->is_prime();
+
+			int array_size = log2(val); //this will always be an upper bound for the number of prime factors a Number has
+			prime_factors = new int[array_size]; //space is wasted, because the number of unique prime factors is almost always less than log2(val), but we can't predict the exact amount
+			std::fill_n(prime_factors, array_size, 0);
+			this->prime_factorize(prime_factors);
+
+			while (prime_factors[prime_size] != 0){
+				prime_size++;
+			}
+		}
+		catch (std::exception &e){
+			if (prime_factors) { delete[] prime_factors; }
+			prime_factors = nullptr;
+			throw;
+		}
+
+		
+
 	}
+
 
 
 };
