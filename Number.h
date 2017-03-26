@@ -1,6 +1,22 @@
 #include <iostream>
 #include <exception>
 
+//returns true if lhs is divisible by rhs
+bool is_div(const int& lhs, const int& rhs){
+	return lhs % rhs == 0;
+}
+
+//returns true if num is a prime number
+bool is_prime(const int& num){
+	if (num == 1) { return false; }
+	for (int i = 2; i < num; i++){
+		if (is_div(num, i)){
+			return false;
+		}
+		return true;
+	}
+}
+
 class Number {
 
 private:
@@ -30,7 +46,7 @@ private:
 	void prime_factorize(OutputIt begin){
 		int i = 2;
 		while (i <= val){
-			if (this->is_div(i) && is_prime(i)){*begin = i}
+			if (this->is_div(i) && ::is_prime(i)){ *begin = i; }
 			++begin;
 			++i;
 		}
@@ -56,8 +72,6 @@ public:
 			prime_factors = nullptr;
 			throw;
 		}
-	
-
 	}
 
 	//Constructor that takes an int to use for the Number's value (must be a positive int)
@@ -119,23 +133,18 @@ public:
 	}
 
 
+	//Acessor Functions:
+
+	int get_value(){return val;}
+	bool get_prime(){return prime;}
+	int get_prime_size(){return prime_size;}
+	int get_ith_unique_prime_factor(int i){
+		if (i >= prime_size){
+			std::cout << "Error" << std::endl;
+			throw;
+		}
+		return prime_factors[i];
+	}
 
 
 };
-
-//returns true if lhs is divisible by rhs
-bool is_div(const int& lhs, const int& rhs){
-	return lhs % rhs == 0;
-}
-
-
-//returns true if num is a prime number
-bool is_prime(const int& num){
-	if (num == 1) { return false; }
-	for (int i = 2; i < num; i++){
-		if (is_div(num, i)){
-			return false;
-		}
-		return true;
-	}
-}
