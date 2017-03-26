@@ -76,7 +76,7 @@ private:
 	//this function takes an iterator to a container and puts the prime factors of the Number in it
 	void prime_factorize(OutputIt begin){
 		int i = 2;
-		while (i < val){
+		while (i <= val){
 			if (this->is_div(i) && ::is_prime(i)){
 				*begin = i;
 				++begin;
@@ -116,9 +116,9 @@ public:
 		try{
 			prime = this->is_prime();
 
-			int array_size = log2(val); //this will always be an upper bound for the number of prime factors a Number has
+			int array_size = log2(val) + 1; //this will always be an upper bound for the number of prime factors a Number has
 			
-			prime_factors = new int[array_size]; //space is wasted, because the number of unique prime factors is almost always less than log2(val), but we can't predict the exact amount
+			prime_factors = new int[array_size]; //space is wasted, because the number of unique prime factors is almost always less than log2(val) + 1, but we can't predict the exact amount
 			std::fill_n(prime_factors, array_size, 0);
 			this->prime_factorize(prime_factors);
 
@@ -221,3 +221,9 @@ public:
 	
 
 };
+
+Number operator*(const Number& lhs, const Number& rhs){
+	Number product = lhs;
+	product *= rhs;
+	return product;
+}
