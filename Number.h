@@ -107,6 +107,17 @@ public:
 		return *this;
 	}
 
+	//Move constructor
+	Number(Number&& rhs){
+		this->swap(rhs);
+	}
+
+	//Destructor
+	virtual ~Number(){
+		delete[] prime_factors;
+		prime_factors = nullptr;
+	}
+
 
 
 
