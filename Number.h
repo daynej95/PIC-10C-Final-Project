@@ -1,21 +1,6 @@
 #include <iostream>
 #include <exception>
 
-//returns true if lhs is divisible by rhs
-bool is_div(const int& lhs, const int& rhs){
-	return lhs % rhs == 0;
-}
-
-bool is_prime(const int& num){
-	if (num == 1) { return false; }
-	for (int i = 2; i < num; i++){
-		if (is_div(num, i)){
-			return false;
-		}
-		return true;
-	}
-}
-
 class Number {
 
 private:
@@ -54,7 +39,18 @@ private:
 public:
 
 	//Default constructor
-	Number() : val(1), prime(false), prime_factors(new int[0]), prime_size(0) {}
+	Number() : val(1), prime(false), prime_factors(nullptr), prime_size(0) {
+		try{
+			prime_factors = new int[0];
+		}
+		catch (std::exception &e){
+			if (prime_factors) { delete[] prime_factors; }
+			prime_factors = nullptr;
+			throw;
+		}
+	
+
+	}
 
 	//Constructor that takes an int to use for the Number's value (must be a positive int)
 	Number(const int& num) : val(num), prime(false), prime_factors(nullptr), prime_size(0) {
@@ -78,12 +74,43 @@ public:
 			if (prime_factors) { delete[] prime_factors; }
 			prime_factors = nullptr;
 			throw;
+		}		
+	}
+
+	//Copy constructor
+	Number(const Number& rhs) : val(rhs.val), prime(rhs.prime), prime_factors(nullptr), prime_size(rhs.prime_size) {
+		try{
+			int array_size = log2(val);
+			prime_factors = new int[array_size];
+			for (size_t i = 0; i < array_size; i++){
+				prime_factors[i] = rhs.prime_factors[i];
+			}
 		}
-
-		
-
+		catch (std::exception &e){
+			if (prime_factors) { delete[] prime_factors; }
+			prime_factors = nullptr;
+			throw;
+		}
 	}
 
 
 
+
 };
+
+//returns true if lhs is divisible by rhs
+bool is_div(const int& lhs, const int& rhs){
+	return lhs % rhs == 0;
+}
+
+
+//returns true if num is a prime number
+bool is_prime(const int& num){
+	if (num == 1) { return false; }
+	for (int i = 2; i < num; i++){
+		if (is_div(num, i)){
+			return false;
+		}
+		return true;
+	}
+}
