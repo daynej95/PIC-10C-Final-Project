@@ -1,5 +1,19 @@
 #include <iostream>
 
+//returns true if lhs is divisible by rhs
+bool is_div(const int& lhs, const int& rhs){
+	return lhs % rhs == 0;
+}
+
+bool is_prime(const int& num){
+	for (int i = 2; i < num; i++){
+		if (is_div(num, i)){
+			return false;
+		}
+		return true;
+	}
+}
+
 class Number {
 
 private:
@@ -7,27 +21,23 @@ private:
 	//fields
 	int val;
 	bool prime;
-
 	int* prime_factors; //the unique prime factors of a Number
-	int prime_size; //the number of unique prime factors of a number
+	int prime_size; //the amount of unique prime factors of a number
 
 
 	//private member functions:
 
+
 	//returns true if val is divisible by rhs
 	bool is_div(const int& rhs){
-		return val % rhs == 0;
+		return ::is_div(val, rhs);
 	}
 
 	//returns true if val is a prime number
 	bool is_prime(){
-		for (int i = 2; i < val; i++){
-			if (this->is_div(i)){
-				return false;
-			}
-			return true;
-		}
+		return ::is_prime(val);
 	}
+
 
 public:
 
