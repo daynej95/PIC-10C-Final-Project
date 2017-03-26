@@ -38,6 +38,15 @@ private:
 		return ::is_prime(val);
 	}
 
+	template<typename OutputIt>
+	//this function takes an iterator to a container and puts the prime factors of the Number in it
+	void prime_factorize(OutputIt begin){
+		int i = 2;
+		while (i <= val){
+			if (this->is_div(i) && is_prime(i)){*begin = i}
+			++begin;
+		}
+	}
 
 public:
 
