@@ -4,25 +4,15 @@ class Number {
 
 private:
 
+	//fields
 	int val;
 	bool prime;
 
+	int* prime_factors; //the unique prime factors of a Number
+	int prime_size; //the number of unique prime factors of a number
 
 
-public:
-
-	//Default constructor
-	Number() : val(1), prime(false){}
-
-
-	//Constructor that takes an int to use for the Number's value (must be a positive int)
-	Number(const int& num) : val(num), prime(false){
-		if (num < 1){
-			std::cout << "Warning: All numbers must be positive." << std::endl;
-			throw;
-		}
-		prime = this->is_prime();
-	}
+	//private member functions:
 
 	//returns true if val is divisible by rhs
 	bool is_div(const int& rhs){
@@ -39,7 +29,19 @@ public:
 		}
 	}
 
+public:
 
+	//Default constructor
+	Number() : val(1), prime(false), prime_factors(new int[0]), prime_size(0) {}
+
+	//Constructor that takes an int to use for the Number's value (must be a positive int)
+	Number(const int& num) : val(num) {
+		if (num < 1){
+			std::cout << "Warning: non-positive number introduced." << std::endl;
+			throw;
+		}
+		prime = this->is_prime();
+	}
 
 
 };
