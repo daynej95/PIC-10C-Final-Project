@@ -1,5 +1,6 @@
 #include <iostream>
 #include <exception>
+#include <algorithm>
 
 //returns true if lhs is divisible by rhs
 bool is_div(const int& lhs, const int& rhs){
@@ -205,8 +206,8 @@ public:
 		val *= rhs.val; //from here I could have just done *this = Number(val), but I think it's more interesting to use the prime factorizations I already have to determine the new one
 		prime = (this->is_prime() && rhs.val == 1 || rhs.is_prime() && val == 1); //the product is only prime if one of the inputs is 1 and the other is prime, otherwise it is not prime
 
-		int* temp = new int[prime_size + rhs.prime_size]; //at most, the product's prime factorization will be as big as the sum of those of the two inputs
-		std::fill_n(temp, prime_size + rhs.prime_size, 0);
+		int* temp = new int[prime_size + rhs.prime_size + 1]; //at most, the product's prime factorization will be as big as the sum of those of the two inputs
+		std::fill_n(temp, prime_size + rhs.prime_size + 1, 0);
 		unique_merge(prime_factors, prime_factors + prime_size, rhs.prime_factors, rhs.prime_factors + rhs.prime_size, temp);
 
 		std::swap(prime_factors, temp);
@@ -218,12 +219,17 @@ public:
 		}
 		return *this;
 	}
-	
+
+	//returns the smallest Number with an identical set of prime factors
+	Number small_common(){
+		int result = 1;
+		std::for_each(prime_factors, prime_factors + prime_size, [&result](int y) -> void{ result *= y; });
+		return Number(result);
+	}
 
 };
 
-Number operator*(const Number& lhs, const Number& rhs){
-	Number product = lhs;
-	product *= rhs;
-	return product;
+Number operator*(Number lhs, const Number& rhs){
+	lhs *= rhs;
+	return Number(lhs);
 }
