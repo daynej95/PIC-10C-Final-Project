@@ -13,8 +13,8 @@ bool is_prime(const int& num){
 		if (is_div(num, i)){
 			return false;
 		}
-		return true;
 	}
+	return true;
 }
 
 template<typename ForwardIt, typename OutputIt>
@@ -76,9 +76,11 @@ private:
 	//this function takes an iterator to a container and puts the prime factors of the Number in it
 	void prime_factorize(OutputIt begin){
 		int i = 2;
-		while (i <= val){
-			if (this->is_div(i) && ::is_prime(i)){ *begin = i; }
-			++begin;
+		while (i < val){
+			if (this->is_div(i) && ::is_prime(i)){
+				*begin = i;
+				++begin;
+			}
 			++i;
 		}
 	}
@@ -115,6 +117,7 @@ public:
 			prime = this->is_prime();
 
 			int array_size = log2(val); //this will always be an upper bound for the number of prime factors a Number has
+			
 			prime_factors = new int[array_size]; //space is wasted, because the number of unique prime factors is almost always less than log2(val), but we can't predict the exact amount
 			std::fill_n(prime_factors, array_size, 0);
 			this->prime_factorize(prime_factors);
@@ -176,7 +179,25 @@ public:
 		}
 		return prime_factors[i];
 	}
-
+	
+	//Printing to the console
+	void print_prime_factors(){
+		std::cout << "{";
+		if (prime_size != 0){
+			std::cout << prime_factors[0];
+			for (size_t i = 1; i < prime_size; i++){
+				std::cout << ", " << prime_factors[i];
+			}
+		}
+		std::cout << "}";
+	}
+	void print_Number_info(){
+		std::cout << "Value: " << val << std::endl;
+		std::cout << "Is this number prime? : " << (prime ? "Yes" : "No") << std::endl;
+		std::cout << "Prime factors: ";
+		print_prime_factors();
+		std::cout << std::endl;
+	}
 
 	//Some arithmetic
 
@@ -186,7 +207,7 @@ public:
 
 		int* temp = new int[prime_size + rhs.prime_size]; //at most, the product's prime factorization will be as big as the sum of those of the two inputs
 		std::fill_n(temp, prime_size + rhs.prime_size, 0);
-		unique_merge(prime_factors[0], prime_factors[prime_size], rhs.prime_factors[0], rhs.prime_factors[rhs.prime_size], temp);
+		unique_merge(prime_factors, prime_factors + prime_size, rhs.prime_factors, rhs.prime_factors + rhs.prime_size, temp);
 
 		std::swap(prime_factors, temp);
 		delete[] temp;
