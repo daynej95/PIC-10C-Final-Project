@@ -35,6 +35,14 @@ private:
 			++i;
 		}
 	}
+	
+	//swap function
+	void swap(Number& rhs){
+		std::swap(val, rhs.val);
+		std::swap(prime, rhs.prime);
+		std::swap(prime_factors, rhs.prime_factors);
+		std::swap(prime_size, rhs.prime_size);
+	}
 
 public:
 
@@ -91,6 +99,12 @@ public:
 			prime_factors = nullptr;
 			throw;
 		}
+	}
+
+	//Assignment operator
+	Number operator=(Number rhs){
+		this->swap(rhs);
+		return *this;
 	}
 
 
